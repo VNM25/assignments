@@ -16,6 +16,126 @@
   Once you've implemented the logic, test your code by running
 */
 
-class Calculator {}
+class Calculator {
+
+  constructor() {
+    this.result = 0;
+  }
+
+  add(num) {
+    console.log('inside add', this.result, num);
+    this.result += num;
+  }
+
+  subtract(num) {
+    console.log('inside subtract', this.result, num);
+    this.result -= num;
+  }
+
+  multiply(num) {
+    this.result *= num;
+  }
+
+  divide(num) {
+    try {
+      if (num == 0) throw ErrorEvent
+      this.result /= num;
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+  clear() {
+    this.result = 0;
+  }
+
+  getResult() {
+    return this.result;
+  }
+
+  calculate(str) {
+    console.log(str);
+    var i = 0;
+    var obj = [];
+    var sign = []
+    while (i < str.length) {
+      console.log(i, str[i], obj, sign);
+      if (str[i] == ' ') {
+        i += 1;
+        continue;
+      }
+      try {
+        if (/[^\d+\-*/(). ]/.test(str[i])) {
+          throw 'Enter Valid Expression';
+        }
+      }
+      catch (err) {
+        throw err
+      }
+      if (str[i] == '(') {
+        i += 1;
+        var newStr = ''
+        try {
+          while (str[i] != ')') {
+            newStr += str[i];
+            i += 1;
+          }
+          const val = parseFloat(this.calculate(newStr));
+          if (val == null) {
+            return null;
+          }
+          if (sign.length == 0) {
+            this.result = val;
+          } else {
+            const func = sign.pop();
+            console.log('func', func);
+            eval(`${func}(val)`);
+          }
+          console.log('inside paranthesis', this.result, obj);
+        }
+        catch (err) {
+          throw 'Enter valid Parenthisis', err;
+        }
+      }
+      else if (str[i] == ')') {
+        throw 'Enter valid Parenthesis';
+      }
+      else if (str[i] == '+') {
+        sign.push('this.add');
+      }
+      else if (str[i] == '-') {
+        sign.push('this.subtract');
+      }
+      else if (str[i] == '/') {
+        sign.push('this.divide');
+      }
+      else if (str[i] == '*') {
+        sign.push('this.multiply');
+      }
+      else {
+        console.log('str[i]', str[i])
+        var num = str[i]
+        while (/[^\d.]/.test(str[i + 1]) && i < (str.length - 1)) {
+          num += str[i + 1]
+        }
+        const val = parseFloat(obj.length == 0 ? num : obj.pop());
+        if (sign.length == 0) {
+          this.result = val;
+        } else {
+          const func = sign.pop();
+          console.log('func', func);
+          eval(`${func}(val)`);
+        }
+        console.log('result', this.result);
+      }
+      i += 1;
+    }
+    console.log(obj, sign, this.result)
+    return this.result;
+  }
+}
+var cal = new Calculator;
+console.log('Final Result', cal.calculate('2 + 3 * 4'));
 
 module.exports = Calculator;

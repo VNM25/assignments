@@ -39,11 +39,91 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+
+const app = express();
+
+app.use(bodyParser.json());
+
+app.get('/todos', function (req, res) {
+  fs.readFile('week-2/02-nodejs/todos.json', 'utf8', (err, data) => {
+    console.log(data);
+    res.status(200).json(JSON.parse(data));
+  })
+})
+
+app.get('/todos/:id', function (req, res) {
+  fs.readFile('week-2/02-nodejs/todos.json', 'utf8', (err, data) => {
+    const todos = JSON.parse(data);
+    let todoIndex = todos.findIndex((item) => item.id === parseInt(req.params.id))
+    console.log(todoIndex);
+    if (todoIndex == -1) {
+      res.status(404).send('NOT FOUND')
+    }
+    else {
+      res.status(200).send(todos[todoIndex])
+    }
+  });
+})
+
+app.post('/todos', function (req, res) {
+  console.log(req.body);
+  const newTodo = {
+    id: Math.floor(Math.random() * 1000000),
+    title: req.body.title,
+    completed: req.body.completed,
+    description: req.body.description
+  }
+  fs.readFile('week-2/02-nodejs/todos.json', 'utf8', (err, data) => {
+    const todos = JSON.parse(data);
+    todos.push(newTodo);
+    fs.writeFileSync('week-2/02-nodejs/todos.json', JSON.stringify(todos))
+    res.status(201).json(newTodo);
+  })
+
+})
+
+app.delete('/todos/:id', function (req, res) {
+  console.log('req', req.params);
+  fs.readFile('week-2/02-nodejs/todos.json', 'utf8', (err, data) => {
+    const todos = JSON.parse(data);
+    const todoIndex = todos.findIndex(function (t) {
+      return t.id == parseInt(req.params.id);
+    })
+    console.log('todo id', todoIndex);
+    if (todoIndex == -1) {
+      res.status(404).send();
+    }
+    else {
+      todos.splice(todoIndex, 1);
+      res.status(200).send();
+    }
+    fs.writeFileSync('week-2/02-nodejs/todos.json', JSON.stringify(todos))
+  })
+});
+
+app.put('/todos/:id', function (req, res) {
+  fs.readFile('week-2/02-nodejs/todos.json', 'utf8', (err, data) => {
+    let todos = JSON.parse(data);
+    const todoIndex = todos.findIndex(t => t.id === parseInt(req.params.id))
+    if (todoIndex == -1) {
+      res.status(404).send()
+    }
+    else {
+      todos[todoIndex].title = req.body.title;
+      todos[todoIndex].completed = req.body.completed;
+      res.status(200).json(todos[todoIndex])
+    }
+    fs.writeFileSync('week-2/02-nodejs/todos.json', JSON.stringify(todos))
+  })
+})
+
+app.use((req, res, next) => {
+  res.status(404).send()
+})
+
+// app.listen(3000)
+
+module.exports = app;

@@ -11,7 +11,72 @@
 */
 
 class Todo {
+  constructor() {
+    this.list = []
+  }
+
+  add(todo) {
+    this.list.push(todo)
+  }
+
+  remove(index) {
+    try {
+      if (index >= 0 && index < this.list.length) {
+        this.list.splice(index, 1);
+      }
+      else
+        throw 'list is Empty'
+    }
+    catch (value) {
+      console.warn(value);
+    }
+  }
+
+  update(index, updatedTodo) {
+    try {
+      if (index >= 0 && index < this.list.length) {
+        this.list[index] = updatedTodo;
+      }
+      else
+        throw 'enter valid Index'
+    }
+    catch (value) {
+      console.warn(value);
+    }
+  }
+
+  getAll() {
+    return this.list;
+  }
+
+  get(index) {
+    try {
+      if (index >= 0 && index < this.list.length) {
+        return this.list[index]
+      }
+      else
+        throw 'enter valid Index'
+    }
+    catch (value) {
+      console.warn(value);
+      return null
+    }
+  }
+
+  clear() {
+    this.list = []
+  }
 
 }
 
+
+
+// let to = new Todo()
+
+// to.add('hello girl')
+// to.add('wanna go out')
+// console.log(to.getAll())
+// // to.remove()
+// to.remove()
+// console.log(to.getAll())
 module.exports = Todo;
