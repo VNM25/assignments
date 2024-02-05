@@ -1,6 +1,17 @@
 const jwt = require('jsonwebtoken');
 const jwtPassword = 'secret';
+const z = require('zod')
 
+// const email = z.string().email()
+// const password = z.string().min(6)
+
+// console.log(password.safeParse('ehheh').error.format()._errors[0]);
+
+const checkValidity = z.object({ username: z.string().email(), password: z.string().refine((val) => val.length >= 6, (val) => ({ message: `password less than 6 characters` })) })
+
+// let valid = checkValidity.safeParse({ username: 'hellond.com', password: 'wmvnmborld' })
+// console.log(valid);
+// console.log('hello');
 
 /**
  * Generates a JWT for a given username and password.
@@ -14,8 +25,21 @@ const jwtPassword = 'secret';
  *                        the password does not meet the length requirement.
  */
 function signJwt(username, password) {
+    valid = checkValidity.safeParse({ username: username, password: password })
+    // console.log(valid);
+    if (!valid.success) {
+        // console.log('inside false', valid.error.format());
+        return null;
+    }
+    else {
+        let token = jwt.sign({ username: username }, jwtPassword)
+        // console.log("Token : ", token);
+        return token;
+    }
     // Your code here
 }
+
+// verifyJwt(signJwt('hello@kdn.com', 'worldddffd'))
 
 /**
  * Verifies a JWT using a secret key.
@@ -26,6 +50,16 @@ function signJwt(username, password) {
  *                    using the secret key.
  */
 function verifyJwt(token) {
+    // console.log(token);
+    try {
+        jwt.verify(token, jwtPassword);
+        return true;
+    }
+    catch {
+        // console.log('you are not verified');
+        return false;
+    }
+    // console.log(verified);
     // Your code here
 }
 
@@ -36,14 +70,21 @@ function verifyJwt(token) {
  * @returns {object|false} The decoded payload of the JWT if the token is a valid JWT format.
  *                         Returns false if the token is not a valid JWT format.
  */
+
+// decodeJwt('eyJhbGciOiJIUzI1NiIsIn5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxvQGtkbi5jb20iLCJpYXQiOjE3MDYzNzY3MDd9.K753CmKgk8H2tUm7YaxtWoTVBN5vs6aE9xLNgDz7Mv4')
 function decodeJwt(token) {
+        const decodedData = jwt.decode(token);
+        console.log(decodedData);
+        if (decodedData) return true;
+        else return false;
+
     // Your code here
 }
 
 
 module.exports = {
-  signJwt,
-  verifyJwt,
-  decodeJwt,
-  jwtPassword,
+    signJwt,
+    verifyJwt,
+    decodeJwt,
+    jwtPassword,
 };
