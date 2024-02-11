@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://admin:Helloworld%402@cluster0.skkkq8l.mongodb.net/courseApp');
+mongoose.connect('mongodb+srv://admin:helloworld@cluster0.skkkq8l.mongodb.net/courseApp');
 
-// Define schemas
+// Define schemas 
 const AdminSchema = new mongoose.Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true }
+    username: String,
+    password: String
     // Schema definition here
 });
 
 const UserSchema = new mongoose.Schema({
-    name: String, password: String
+    username: String, 
+    password: String,
+    coursePurchased: Array,
     // Schema definition here
 });
 
