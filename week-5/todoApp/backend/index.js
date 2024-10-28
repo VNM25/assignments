@@ -29,15 +29,12 @@ app.post("/todos", async function (req, res) {
 })
 
 app.get("/todos", async function (req, res) {
-    const todos = await todo.find();
-    console.log(todos);
-    
+    const todos = await todo.find();    
     res.status(200).json(todos)
 })
 
 app.put("/completed", async function (req, res) {
     let valid = updateTodo.safeParse(req.body);
-    console.log("🚀 ~ valid:", valid)
     if(valid.success){
         await todo.updateOne({
             _id : req.body.id
