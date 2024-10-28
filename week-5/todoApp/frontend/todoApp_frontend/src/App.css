@@ -58,6 +58,31 @@ body {
   margin-bottom: 20px;
 }
 
+.delete-btn {
+  background: transparent; /* Make the button background transparent */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Change cursor to pointer */
+  padding: 0; /* Remove padding */
+  margin-left: 10px; /* Add some spacing between the button and the todo item */
+  transition: transform 0.2s; /* Smooth scaling on hover */
+}
+
+.delete-btn:hover {
+  transform: scale(1.1); /* Slightly scale up on hover */
+  background-color: beige;
+}
+
+.delete-btn img {
+  fill: black; /* Set the fill color for the SVG */
+  width: 40px; /* Set width */
+  height: 40px; /* Set height */
+  transition: fill 0.2s; /* Smooth color transition on hover */
+}
+
+.delete-btn:hover img {
+  background-color: rgba(18, 27, 126, 0.624); /* Darker red color on hover */
+}
+
 h1 {
   text-align: center;
   color: #333;

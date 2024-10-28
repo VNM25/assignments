@@ -56,6 +56,27 @@ app.put("/completed", async function (req, res) {
 
 })
 
+app.delete("/remove", async function (req, res) {
+    let valid = updateTodo.safeParse(req.body);
+    if(valid.success){
+        await todo.deleteOne({
+            _id : req.body.id
+        })
+        res.status(200).json({
+            status: "Success",
+            msg: "Todo deleted"
+        })
+    }
+    else{
+        res.status(404).json({
+            status: "Not found",
+            msg: "Todo does not exist",
+            error: valid.error
+        })
+    }
+
+})
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
