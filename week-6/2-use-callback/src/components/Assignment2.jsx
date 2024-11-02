@@ -8,9 +8,10 @@ export function Assignment2() {
     const [inputText, setInputText] = useState('');
 
     // Your code starts here
-    function showAlert() {
-
-    }
+    const showAlert = useCallback(() => {
+        console.log(inputText);
+        alert(inputText)
+    }, [])
     // Your code ends here
 
     return (
@@ -21,12 +22,14 @@ export function Assignment2() {
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Enter some text"
             />
+            <br />
+            <br />
             <Alert showAlert={showAlert} />
         </div>
     );
 };
 
-function Alert({showAlert}) {
+const Alert = React.memo(({showAlert}) => {
     return <button onClick={showAlert}>Show Alert</button>
-}
+})
 
